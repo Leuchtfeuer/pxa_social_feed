@@ -94,7 +94,7 @@ class FeedRepository extends Repository
      *
      * @param array $configurations
      * @param int $limit
-     * @return QueryResult
+     * @return object[]|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     public function findByConfigurations(array $configurations, int $limit = 0)
     {

@@ -65,6 +65,11 @@ class Token extends AbstractEntity
     const YOUTUBE = 4;
 
     /**
+     * youtube token
+     */
+    const LINKEDIN = 5;
+
+    /**
      * Default PID
      *
      * @var int
@@ -448,6 +453,16 @@ class Token extends AbstractEntity
     }
 
     /**
+     * Check if it's of type linkedin
+     *
+     * @return bool
+     */
+    public function isLinkedInType(): bool
+    {
+        return $this->type === static::LINKEDIN;
+    }
+
+    /**
      * Get FB
      *
      * @return Facebook
@@ -480,6 +495,7 @@ class Token extends AbstractEntity
             static::INSTAGRAM,
             static::TWITTER,
             static::YOUTUBE,
+            static::LINKEDIN
         ];
     }
 }
