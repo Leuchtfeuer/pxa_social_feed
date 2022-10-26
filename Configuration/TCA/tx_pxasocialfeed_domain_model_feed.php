@@ -22,6 +22,7 @@ return (function () {
                 '2' => 'ext-pxasocialfeed-model-icon-instagram',
                 '3' => 'ext-pxasocialfeed-model-icon-twitter',
                 '4' => 'ext-pxasocialfeed-model-icon-youtube',
+                '5' => 'ext-pxasocialfeed-model-icon-linkedin'
             ],
 
             'delete' => 'deleted',
@@ -65,6 +66,7 @@ return (function () {
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.2', 2, 'ext-pxasocialfeed-model-icon-instagram'],
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.3', 3, 'ext-pxasocialfeed-model-icon-twitter'],
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.4', 4, 'ext-pxasocialfeed-model-icon-youtube'],
+                        [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.5', 5, 'ext-pxasocialfeed-model-icon-linkedin'],
                     ],
                     'fieldWizard' => [
                         'selectIcons' => [

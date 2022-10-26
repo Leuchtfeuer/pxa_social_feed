@@ -44,6 +44,7 @@ defined('TYPO3_MODE') or die();
         'ext-pxasocialfeed-model-icon-instagram' => 'instagram.svg',
         'ext-pxasocialfeed-model-icon-twitter' => 'twitter.svg',
         'ext-pxasocialfeed-model-icon-youtube' => 'youtube.svg',
+        'ext-pxasocialfeed-model-icon-linkedin' => 'linkedin.svg',
     ];
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
