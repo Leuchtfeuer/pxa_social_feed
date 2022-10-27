@@ -66,6 +66,7 @@ class TokenValidator extends AbstractValidator
                 $properties = ['apiKey'];
                 break;
             case $token->isLinkedInType():
+                break;
         }
 
         if ($this->isBeGroupRequired()) {

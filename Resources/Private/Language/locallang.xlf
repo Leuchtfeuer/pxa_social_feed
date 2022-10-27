@@ -126,8 +126,11 @@
             <trans-unit id="module.social_id4">
                 <source>Youtube channel ID</source>
             </trans-unit>
+            <trans-unit id="module.social_id5">
+                <source>LinkedIn channel ID</source>
+            </trans-unit>
             <trans-unit id="module.social_id_tooltip">
-                <source>Either Facebook (might be 'me' or page ID) / Twitter / Instagram (Facebook page ID) / YouTube ID</source>
+                <source>Either Facebook (might be 'me' or page ID) / Twitter / Instagram (Facebook page ID) / YouTube ID / LinkedIn ID</source>
             </trans-unit>
             <trans-unit id="module.save_configuration_first">
                 <source>Please select token and save configuration first</source>
