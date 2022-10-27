@@ -88,7 +88,8 @@ class LinkedInSource extends BaseSource
             'part' => 'snippet',
             'type' => 'video',
             'maxResults' => $configuration->getMaxItems(),
-            'channelId' => $configuration->getSocialId(),
+            //'channelId' => $configuration->getSocialId(),
+            'channelId' => '[Not needed]',
             'key' => $configuration->getToken()->getApiKey()
         ];
 

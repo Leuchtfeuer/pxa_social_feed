@@ -169,6 +169,9 @@
             <trans-unit id="module.type.4">
                 <source>Youtube</source>
             </trans-unit>
+            <trans-unit id="module.type.5">
+                <source>LinkedIn</source>
+            </trans-unit>
 
             <trans-unit id="validator.error.1578488026895">
                 <source>Please choose group for "Editor access rights"</source>
