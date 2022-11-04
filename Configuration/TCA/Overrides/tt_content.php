@@ -5,7 +5,8 @@ defined('TYPO3_MODE') || die('Access denied.');
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'pxa_social_feed',
     'Showfeed',
-    'Pxa Social Feed'
+    'Pxa Social Feed',
+    'FILE:EXT:pxa_social_feed/Resources/public/Icons/extention_icon.png'
 );
 
 // @codingStandardsIgnoreStart
