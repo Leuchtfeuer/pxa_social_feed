@@ -21,25 +21,8 @@ class LinkedInSource extends BaseSource
      */
     public function load(): array
     {
-        $fields = $this->getFields($this->getConfiguration());
-
-        $endPointUrl = $this->addFieldsAsGetParametersToUrl(
-            $this->generateEndPointUrl('search'),
-            $fields
-        );
-
-        $response = $this->requestYoutubeApi($endPointUrl);
-
-        $body = (string)$response->getBody();
-        $data = json_decode($body, true);
-
-        if (!is_array($data) || !isset($data['items'])) {
-            // @codingStandardsIgnoreStart
-            throw new InvalidFeedSourceData("Youtube response doesn't appear to be a valid json. Items are missing. Response return '$body'.", 1562910457024);
-            // @codingStandardsIgnoreEnd
-        }
-
-        return $data['items'];
+        // no source of feeds for linkedin
+        return [];
     }
 
     /**
