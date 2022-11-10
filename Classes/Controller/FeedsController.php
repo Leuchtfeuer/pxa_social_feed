@@ -2,6 +2,7 @@
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
+use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -62,6 +63,30 @@ class FeedsController extends ActionController
         $feeds = $this->feedRepository->findByConfigurations($configurations, $limit);
 
         $this->view->assign('feeds', $feeds);
+
+        $filters = [
+            [
+                "id" => 0,
+                "type" => "all"
+            ],
+            [
+                "id" => Token::FACEBOOK,
+                "type" => "facebook"
+            ], [
+                "id" => Token::INSTAGRAM,
+                "type" => "instagram"
+            ], [
+                "id" => Token::TWITTER,
+                "type" => "twitter"
+            ], [
+                "id" => Token::YOUTUBE,
+                "type" => "youtube"
+            ], [
+                "id" => Token::LINKEDIN,
+                "type" => "linkedin"
+            ]
+        ];
+        $this->view->assign('filters', $filters);
     }
 
     /**
@@ -85,10 +110,11 @@ class FeedsController extends ActionController
      */
     public function loadFeedAjaxAction(
         string $configuration,
-        int $feedsLimit = 10,
+        int    $feedsLimit = 10,
         string $partial = '',
         string $presentation = ''
-    ) {
+    )
+    {
         $feeds = $this->feedRepository->findByConfigurations(
             GeneralUtility::intExplode(',', $configuration, true),
             $feedsLimit
