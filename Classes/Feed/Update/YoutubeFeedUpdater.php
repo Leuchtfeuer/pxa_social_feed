@@ -58,6 +58,7 @@ class YoutubeFeedUpdater extends BaseUpdater
         $image = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
         if ($image != $feedItem->getImage()) {
             $feedItem->setImage($image);
+
         }
 
         $title = $rawData['snippet']['title'] ?? '';
