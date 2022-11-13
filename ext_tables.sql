@@ -10,6 +10,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_feed
     post_date           int(11)             DEFAULT NULL,
     post_url            varchar(255)        DEFAULT ''  NOT NULL,
     message             text                DEFAULT ''  NOT NULL,
+    imagefile           int(11)             DEFAULT '0' NOT NULL,
     image               text                DEFAULT ''  NOT NULL,
     small_image         text                DEFAULT ''  NOT NULL,
     title               varchar(255)        DEFAULT ''  NOT NULL,
