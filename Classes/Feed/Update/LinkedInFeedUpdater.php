@@ -21,7 +21,25 @@ class LinkedInFeedUpdater extends BaseUpdater
      */
     public function update(FeedSourceInterface $source): void
     {
-      // no updates needed (manual input)
+        $items = $source->load();
+
+        foreach ($items as $rawData) {
+            $feedItem = $this->feedRepository->findOneByExternalIdentifier(
+                $rawData['id']['videoId'],
+                $source->getConfiguration()->getStorage()
+            );
+
+            if ($feedItem === null) {
+                $feedItem = $this->createFeedItem($rawData, $source->getConfiguration());
+            }
+
+            $this->updateFeedItem($feedItem, $rawData);
+
+            // Call hook
+            $this->emitSignal('beforeUpdateYoutubeFeed', [$feedItem, $rawData, $source->getConfiguration()]);
+
+            $this->addOrUpdateFeedItem($feedItem);
+        }
     }
 
     /**

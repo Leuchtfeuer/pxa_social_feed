@@ -90,6 +90,13 @@ class Feed extends AbstractEntity
     protected $message = '';
 
     /**
+     * imagefile
+     *
+     * @var int
+     */
+    protected $imageFile = 0;
+
+    /**
      * image
      *
      * @var string
@@ -212,6 +219,26 @@ class Feed extends AbstractEntity
         $this->message = $message;
     }
 
+    /**
+     * Returns the imagefile
+     *
+     * @return int $imageFile
+     */
+    public function getImageFile(): int
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * Sets the imagefile
+     *
+     * @param int $image
+     * @return void
+     */
+    public function setImageFile(int $imageFile): void
+    {
+        $this->imageFile = $imageFile;
+    }
     /**
      * Returns the image
      *
