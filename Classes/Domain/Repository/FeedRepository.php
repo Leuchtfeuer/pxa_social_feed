@@ -112,8 +112,9 @@ class FeedRepository extends Repository
         if ($limit > 0) {
             $query->setLimit($limit);
         }
+        $feeds = $query->execute();
 
-        return $query->execute();
+        return $feeds;
     }
 
     /**

@@ -13,11 +13,13 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class BaseUpdater
@@ -40,7 +42,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     /**
      * Keep all processed feed items
      *
-     * @var ObjectStorage
+     * @var ObjectStorage<Feed>
      */
     protected $feeds = null;
 
@@ -59,42 +61,64 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     public function createImageRelations(Feed $feed)
     {
         try {
-            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-            $fileObject = $resourceFactory->getFileObject($feed->getImage());
-            $contentElement = BackendUtility::getRecord(
+            $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+            $fileObjects = $fileRepository->findByRelation(
                 'tx_pxasocialfeed_domain_model_feed',
-                (int)$feed->getUid()
+                'image',
+                $feed->getUid()
             );
-// Assemble DataHandler data
-            $newId = 'NEW1234';
-            $data = [];
-            $data['sys_file_reference'][$newId] = [
-                'table_local' => 'sys_file',
-                'uid_local' => $fileObject->getUid(),
-                'tablenames' => 'tx_pxasocialfeed_domain_model_feed',
-                'uid_foreign' => $contentElement['uid'],
-                'fieldname' => 'image',
-                'pid' => $contentElement['pid']
-            ];
-            $data['tx_pxasocialfeed_domain_model_feed'][$contentElement['uid']] = [
-                'image' => $newId
-            ];
-            // Get an instance of the DataHandler and process the data
-            $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-            $dataHandler->start($data, []);
-            $dataHandler->process_datamap();
-            // Error or success reporting
-            if (count($dataHandler->errorLog) === 0) {
-                // Handle success
-            } else {
-                // Handle errors
+
+            if (empty($fileObjects)) {
+                $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+                $fileObject = $resourceFactory->getFileObject($feed->getSmallImage());
+                $contentElement = BackendUtility::getRecord(
+                    'tx_pxasocialfeed_domain_model_feed',
+                    (int)$feed->getUid()
+                );
+                // Assemble DataHandler data
+                $newId = 'NEW1234';
+                $data = [];
+                $data['sys_file_reference'][$newId] = [
+                    'table_local' => 'sys_file',
+                    'uid_local' => $fileObject->getUid(),
+                    'tablenames' => 'tx_pxasocialfeed_domain_model_feed',
+                    'uid_foreign' => $contentElement['uid'],
+                    'fieldname' => 'image',
+                    'pid' => $contentElement['pid']
+                ];
+                $data['tx_pxasocialfeed_domain_model_feed'][$contentElement['uid']] = [
+                    'image' => $newId,
+                    'pid' => $contentElement['pid']
+                ];
+
+                // Get an instance of the DataHandler and process the data
+                $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+                $dataHandler->start($data, []);
+                $dataHandler->process_datamap();
+                // Error or success reporting
+                if (count($dataHandler->errorLog) === 0) {
+                    // Handle success
+                } else {
+                    // Handle errors
+                }
             }
-        } catch (FileDoesNotExistException $e) {
+        } catch (FileDoesNotExistException $exception) {
             // TODO: ignore in WIP
         }
 
     }
 
+    /**
+     * Saves image from url to fileadmin
+     * @param $url
+     * @param BaseUpdater $instance
+     * @param Feed $feeditem
+     * @return string[]
+     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFolderException
+     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
+     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderWritePermissionsException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     */
     public function storeImg($url, BaseUpdater $instance, Feed $feeditem)
     {
         $resourceFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
@@ -138,7 +162,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
 
                 $file_normal = $downloadFolderNormal->createFile($normal_f_name);
                 $file_normal->setContents($response->getBody()->getContents());
-                $feeditem->setImage($file_normal->getUid());
+                $feeditem->setSmallImage((string)$file_normal->getUid());
 
             } else if ($response->getStatusCode() === 404) {
                 // not found
@@ -168,10 +192,12 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     public function persist(): void
     {
         $this->objectManager->get(PersistenceManagerInterface::class)->persistAll();
+        /*
         if (!$this->ranAlready) {
             $this->createImageRelation();
             $this->ranAlready = true;
         }
+        */
     }
 
     /**
@@ -194,9 +220,10 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      * Creates relation between feed and image
      * @return void
      */
-    public function createImageRelation(): void
+    public function loadImages(): void
     {
         foreach ($this->feeds as $feed) {
+            $this->storeImg($feed->getImageUrl(), $this, $feed);
             $this->createImageRelations($feed);
         }
     }

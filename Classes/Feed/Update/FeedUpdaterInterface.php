@@ -25,6 +25,11 @@ interface FeedUpdaterInterface
     public function persist(): void;
 
     /**
+     * Get images
+     */
+    public function loadImages(): void;
+
+    /**
      * Clean outdated records after persist
      *
      * @param Configuration $configuration Import configuration

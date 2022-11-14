@@ -71,19 +71,23 @@ class FeedsController extends ActionController
 
             if (!empty($fileObjects)) {
                 // consider first image only
-                $this->view->assign('images', $fileObjects[0] );
-                /*
-                foreach ($fileObjects as $key => $value) {
-                    $feed->setSmallImage(
-                        'fileadmin' .
-                        $value->getOriginalFile()->getIdentifier());
-                }
-                */
+                $this->view->assign('images', $fileObjects[0]);
+                $feed->setSmallImage(
+                    'fileadmin' .
+                    $fileObjects[0]->getOriginalFile()->getIdentifier());
+
+                //foreach ($fileObjects as $key => $value) {
+                //    $feed->setSmallImage(
+                //        'fileadmin' .
+                //        $value->getOriginalFile()->getIdentifier());
+                //}
+
             } else {
                 //default image path.
                 $feed->setSmallImage("DEFAULT");
             }
         }
+
         $this->view->assign('feeds', $feeds);
 
         $filters = [
