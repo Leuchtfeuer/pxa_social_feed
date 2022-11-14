@@ -44,7 +44,7 @@ return (function () {
         ],
         'palettes' => [
             'core' => ['showitem' => 'hidden'],
-            'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, imagefile, --linebreak--, image, --linebreak--, small_image, --linebreak--, likes, --linebreak--, configuration']
+            'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, image, --linebreak--, image_url, --linebreak--, small_image, --linebreak--, likes, --linebreak--, configuration']
         ],
         // @codingStandardsIgnoreEnd
         'columns' => [
@@ -107,19 +107,19 @@ return (function () {
                     'eval' => 'trim'
                 ]
             ],
-            'imagefile' => [
+            'image' => [
                 'exclude' => true,
                 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.image',
                 'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                     'image',
                     [
-                        'maxitems' => 6,
+                        'maxitems' => 1,
                         'minitems'=> 0
                     ],
                     $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
                 )
             ],
-            'image' => [
+            'image_url' => [
                 'exclude' => 1,
                 'label' => $ll . 'tx_pxasocialfeed_domain_model_feeds.image',
                 'config' => [

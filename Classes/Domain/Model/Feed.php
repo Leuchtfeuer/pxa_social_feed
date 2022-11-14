@@ -90,18 +90,18 @@ class Feed extends AbstractEntity
     protected $message = '';
 
     /**
-     * imagefile
+     * image
      *
      * @var int
      */
-    protected $imageFile = 0;
+    protected $image = 0;
 
     /**
      * image
      *
      * @var string
      */
-    protected $image = '';
+    protected $imageUrl = '';
 
     /**
      * small image
@@ -220,31 +220,11 @@ class Feed extends AbstractEntity
     }
 
     /**
-     * Returns the imagefile
-     *
-     * @return int $imageFile
-     */
-    public function getImageFile(): int
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * Sets the imagefile
-     *
-     * @param int $image
-     * @return void
-     */
-    public function setImageFile(int $imageFile): void
-    {
-        $this->imageFile = $imageFile;
-    }
-    /**
      * Returns the image
      *
-     * @return string $image
+     * @return int $image
      */
-    public function getImage(): string
+    public function getImage(): int
     {
         return $this->image;
     }
@@ -252,12 +232,32 @@ class Feed extends AbstractEntity
     /**
      * Sets the image
      *
-     * @param string $image
+     * @param int $image
      * @return void
      */
-    public function setImage(string $image): void
+    public function setImage(int $imageFile): void
     {
-        $this->image = $image;
+        $this->image = $imageFile;
+    }
+    /**
+     * Returns the image URL
+     *
+     * @return string $url
+     */
+    public function getImageUrl(): string
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * Sets the image URL
+     *
+     * @param string $url
+     * @return void
+     */
+    public function setImageUrl(string $url): void
+    {
+        $this->imageUrl = $url;
     }
 
     /**

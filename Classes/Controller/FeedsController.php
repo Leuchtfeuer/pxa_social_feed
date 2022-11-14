@@ -61,7 +61,29 @@ class FeedsController extends ActionController
         $configurations = GeneralUtility::intExplode(',', $this->settings['configuration'], true);
 
         $feeds = $this->feedRepository->findByConfigurations($configurations, $limit);
+        foreach ($feeds as $feed) {
+            $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+            $fileObjects = $fileRepository->findByRelation(
+                'tx_pxasocialfeed_domain_model_feed',
+                'image',
+                $feed->getUid()
+            );
 
+            if (!empty($fileObjects)) {
+                // consider first image only
+                $this->view->assign('images', $fileObjects[0] );
+                /*
+                foreach ($fileObjects as $key => $value) {
+                    $feed->setSmallImage(
+                        'fileadmin' .
+                        $value->getOriginalFile()->getIdentifier());
+                }
+                */
+            } else {
+                //default image path.
+                $feed->setSmallImage("DEFAULT");
+            }
+        }
         $this->view->assign('feeds', $feeds);
 
         $filters = [

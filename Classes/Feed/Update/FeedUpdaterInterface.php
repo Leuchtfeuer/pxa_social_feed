@@ -30,4 +30,5 @@ interface FeedUpdaterInterface
      * @param Configuration $configuration Import configuration
      */
     public function cleanUp(Configuration $configuration): void;
+
 }

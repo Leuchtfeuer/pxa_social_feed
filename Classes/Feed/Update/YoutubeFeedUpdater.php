@@ -55,11 +55,11 @@ class YoutubeFeedUpdater extends BaseUpdater
             $feedItem->setMessage($this->encodeMessage($description));
         }
 
-        $image = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
-        //if ($image != $feedItem->getImage()) {
-            $feedItem->setImage($image);
-            $this->storeImg($image, $this, $feedItem);
-        //}
+        $imageUrl = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
+        if ($imageUrl !== $feedItem->getImageUrl()) {
+            $feedItem->setImageUrl($imageUrl);
+            $this->storeImg($imageUrl, $this, $feedItem);
+        }
 
         $title = $rawData['snippet']['title'] ?? '';
         if ($this != $feedItem->getTitle()) {
@@ -92,4 +92,5 @@ class YoutubeFeedUpdater extends BaseUpdater
 
         return $feedItem;
     }
+
 }
