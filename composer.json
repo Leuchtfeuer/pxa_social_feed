@@ -65,7 +65,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.0.x-dev"
+      "dev-master": "1.0.x-alpha"
     },
     "typo3/cms": {
       "extension-key": "pxa_social_feed",
