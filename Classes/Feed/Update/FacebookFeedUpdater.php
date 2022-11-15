@@ -77,9 +77,12 @@ class FacebookFeedUpdater extends BaseUpdater
         }
 
         if (isset($rawData['attachments']['data'][0]['media']['image']['src'])) {
-            $feed->setImage($rawData['attachments']['data'][0]['media']['image']['src']);
+            $feed->setImageUrl($rawData['attachments']['data'][0]['media']['image']['src']);
         } elseif (isset($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src'])) {
-            $feed->setImage($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src']);
+            $feed->setImageUrl($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src']);
+        }
+        if($feed->getImageUrl() !== "" ){
+            $this->storeImg($feed->getImageUrl(), $this, $feed);
         }
         if (isset($rawData['attachments']['data'][0]['title'])) {
             $feed->setTitle($rawData['attachments']['data'][0]['title']);

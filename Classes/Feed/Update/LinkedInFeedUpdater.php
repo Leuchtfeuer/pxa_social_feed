@@ -9,10 +9,10 @@ use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Feed\Source\FeedSourceInterface;
 
 /**
- * Class YoutubeFeedUpdater
+ * Class LinkedInFeedUpdater
  * @package Pixelant\PxaSocialFeed\Feed\Update
  */
-class YoutubeFeedUpdater extends BaseUpdater
+class LinkedInFeedUpdater extends BaseUpdater
 {
     /**
      * Create/Update feed items
@@ -55,14 +55,14 @@ class YoutubeFeedUpdater extends BaseUpdater
             $feedItem->setMessage($this->encodeMessage($description));
         }
 
-        $imageUrl = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
-        if ($imageUrl !== $feedItem->getImageUrl()) {
-            $feedItem->setImageUrl($imageUrl);
+        $image = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
+        if ($image != $feedItem->getImage()) {
+            $feedItem->setImage($image);
         }
 
         $title = $rawData['snippet']['title'] ?? '';
         if ($this != $feedItem->getTitle()) {
-            $feedItem->setTitle($this->encodeMessage($title));
+            $feedItem->setTitle($title);
         }
     }
 
@@ -91,5 +91,4 @@ class YoutubeFeedUpdater extends BaseUpdater
 
         return $feedItem;
     }
-
 }

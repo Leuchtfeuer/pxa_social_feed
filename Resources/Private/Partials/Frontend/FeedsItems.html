@@ -13,7 +13,7 @@
 
 <ul class="social-feed-container social-feed-{partial -> f:format.case(mode: 'lower')} {presentation}">
     <f:for each="{feeds}" as="feed">
-        <f:render partial="Frontend/{partial}" arguments="{feed: feed}"/>
+        <f:render partial="Frontend/{partial}" arguments="{feed: feed, images: images}"/>
     </f:for>
 </ul>
 

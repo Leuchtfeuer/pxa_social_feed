@@ -33,7 +33,7 @@ defined('TYPO3_MODE') or die();
     // @codingStandardsIgnoreEnd
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pxa_social_feed/Configuration/TSconfig/ContentElementWizard.ts">'
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pxa_social_feed/Configuration/TSconfig/ContentElementWizard.typoscript">'
     );
 
     // Register icons
@@ -44,6 +44,7 @@ defined('TYPO3_MODE') or die();
         'ext-pxasocialfeed-model-icon-instagram' => 'instagram.svg',
         'ext-pxasocialfeed-model-icon-twitter' => 'twitter.svg',
         'ext-pxasocialfeed-model-icon-youtube' => 'youtube.svg',
+        'ext-pxasocialfeed-model-icon-linkedin' => 'linkedin.svg',
     ];
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(

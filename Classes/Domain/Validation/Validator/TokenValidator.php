@@ -65,6 +65,8 @@ class TokenValidator extends AbstractValidator
             case $token->isYoutubeType():
                 $properties = ['apiKey'];
                 break;
+            case $token->isLinkedInType():
+                break;
         }
 
         if ($this->isBeGroupRequired()) {

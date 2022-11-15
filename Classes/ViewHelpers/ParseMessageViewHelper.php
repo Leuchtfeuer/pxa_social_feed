@@ -114,7 +114,7 @@ class ParseMessageViewHelper extends AbstractViewHelper
                 );
                 break;
             case Token::YOUTUBE:
-                //Convert hashtags to youtube searches in <a> links
+                //Convert hashtags to YouTube searches in <a> links
                 $text = preg_replace(
                     "/#([A-Za-z0-9\/\.]*)/",
                     "<a target=\"_blank\" href=\"https://www.youtube.com/results?search_query=#$1\">#$1</a>",
@@ -126,6 +126,9 @@ class ParseMessageViewHelper extends AbstractViewHelper
                     "<a href=\"https://www.youtube.com/user/$1/\">@$1</a>",
                     $text
                 );
+                break;
+            case Token::LINKEDIN:
+                // Nothing to convert - manual entry
                 break;
             default:
                 throw new UnsupportedTokenType("Token type $type is not supported by view helper", 1564384491599);

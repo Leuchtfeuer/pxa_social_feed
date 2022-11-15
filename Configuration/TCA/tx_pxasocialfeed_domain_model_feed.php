@@ -22,6 +22,7 @@ return (function () {
                 '2' => 'ext-pxasocialfeed-model-icon-instagram',
                 '3' => 'ext-pxasocialfeed-model-icon-twitter',
                 '4' => 'ext-pxasocialfeed-model-icon-youtube',
+                '5' => 'ext-pxasocialfeed-model-icon-linkedin'
             ],
 
             'delete' => 'deleted',
@@ -65,6 +66,7 @@ return (function () {
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.2', 2, 'ext-pxasocialfeed-model-icon-instagram'],
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.3', 3, 'ext-pxasocialfeed-model-icon-twitter'],
                         [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.4', 4, 'ext-pxasocialfeed-model-icon-youtube'],
+                        [$ll . 'tx_pxasocialfeed_domain_model_feeds.type.5', 5, 'ext-pxasocialfeed-model-icon-linkedin'],
                     ],
                     'fieldWizard' => [
                         'selectIcons' => [
@@ -106,6 +108,20 @@ return (function () {
                 ]
             ],
             'image' => [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.image',
+                'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                    'image',
+                    [
+                        'maxitems' => 1,
+                        'minitems'=> 0,
+
+                    ],
+
+                    $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+                )
+            ],
+            'image_url' => [
                 'exclude' => 1,
                 'label' => $ll . 'tx_pxasocialfeed_domain_model_feeds.image',
                 'config' => [

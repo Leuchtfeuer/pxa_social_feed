@@ -1,8 +1,15 @@
 <?php
-defined('TYPO3_MODE') or die();
+defined('TYPO3') || die();
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-    'pxa_social_feed',
-    'Configuration/TypoScript',
-    'Pxa Social Feed'
-);
+call_user_func(function () {
+    /**
+      * Extension key
+      */
+    $extensionKey = 'pxa_social_feed';
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+        $extensionKey,
+        'Configuration/TypoScript',
+        'Pxa Social Feed'
+    );
+});

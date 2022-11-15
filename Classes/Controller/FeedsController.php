@@ -2,7 +2,10 @@
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
+use In2code\Powermail\Exception\ElementNotFoundException;
+use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -54,14 +57,58 @@ class FeedsController extends ActionController
      *
      * @return void
      */
-    public function listAction()
+    public function listAction(): void
     {
-        $limit = $this->settings['feedsLimit'] ? intval($this->settings['feedsLimit']) : 10;
+        $limit = $this->settings['feedsLimit'] ? (int)$this->settings['feedsLimit'] : 10;
         $configurations = GeneralUtility::intExplode(',', $this->settings['configuration'], true);
 
         $feeds = $this->feedRepository->findByConfigurations($configurations, $limit);
+        foreach ($feeds as $feed) {
+            try {
+                $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+                $fileObjects = $fileRepository->findByRelation(
+                    'tx_pxasocialfeed_domain_model_feed',
+                    'image',
+                    $feed->getUid()
+                );
+            } catch (\TYPO3Fluid\Fluid\Core\ViewHelper\Exception $exception) {
+                // maybe left over?
+                $feed->setSmallImage("");
+            }
+
+            if (!empty($fileObjects)) {
+                 // consider first image only
+                $feed->setSmallImage(
+                    'fileadmin' .
+                    $fileObjects[0]->getOriginalFile()->getIdentifier());
+            }
+        }
 
         $this->view->assign('feeds', $feeds);
+
+        $filters = [
+            [
+                "id" => 0,
+                "type" => "all"
+            ],
+            [
+                "id" => Token::FACEBOOK,
+                "type" => "facebook"
+            ], [
+                "id" => Token::INSTAGRAM,
+                "type" => "instagram"
+            ], [
+                "id" => Token::TWITTER,
+                "type" => "twitter"
+            ], [
+                "id" => Token::YOUTUBE,
+                "type" => "youtube"
+            ], [
+                "id" => Token::LINKEDIN,
+                "type" => "linkedin"
+            ]
+        ];
+        $this->view->assign('filters', $filters);
     }
 
     /**
@@ -85,10 +132,11 @@ class FeedsController extends ActionController
      */
     public function loadFeedAjaxAction(
         string $configuration,
-        int $feedsLimit = 10,
+        int    $feedsLimit = 10,
         string $partial = '',
         string $presentation = ''
-    ) {
+    )
+    {
         $feeds = $this->feedRepository->findByConfigurations(
             GeneralUtility::intExplode(',', $configuration, true),
             $feedsLimit

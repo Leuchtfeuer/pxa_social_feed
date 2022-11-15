@@ -53,6 +53,7 @@ return (function () {
                     ]
                 ]
             ],
+            \Pixelant\PxaSocialFeed\Domain\Model\Token::LINKEDIN => ['showitem' => 'name, type, --palette--;;' . $accessTab],
         ],
         'palettes' => [
             'paletteGraphApi' => ['showitem' => 'app_id, --linebreak--, app_secret, --linebreak--, access_token'],
@@ -79,6 +80,7 @@ return (function () {
                         [$ll . '.type.type.2', \Pixelant\PxaSocialFeed\Domain\Model\Token::INSTAGRAM],
                         [$ll . '.type.type.3', \Pixelant\PxaSocialFeed\Domain\Model\Token::TWITTER],
                         [$ll . '.type.type.4', \Pixelant\PxaSocialFeed\Domain\Model\Token::YOUTUBE],
+                        [$ll . '.type.type.5', \Pixelant\PxaSocialFeed\Domain\Model\Token::LINKEDIN],
                     ]
                 ]
             ],

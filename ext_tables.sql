@@ -9,9 +9,10 @@ CREATE TABLE tx_pxasocialfeed_domain_model_feed
 
     post_date           int(11)             DEFAULT NULL,
     post_url            varchar(255)        DEFAULT ''  NOT NULL,
-    message             text                            NOT NULL,
-    image               text                            NOT NULL,
-    small_image               text                      NOT NULL,
+    message             text                DEFAULT ''  NOT NULL,
+    image_url           text                DEFAULT '',
+    image               int(11)             DEFAULT NULL,
+    small_image         text                DEFAULT '',
     title               varchar(255)        DEFAULT ''  NOT NULL,
     likes               int(11) unsigned    DEFAULT '0',
     external_identifier varchar(255)        DEFAULT ''  NOT NULL,

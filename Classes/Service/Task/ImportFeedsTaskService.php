@@ -11,6 +11,7 @@ use Pixelant\PxaSocialFeed\Exception\UnsupportedTokenType;
 use Pixelant\PxaSocialFeed\Feed\FacebookFeedFactory;
 use Pixelant\PxaSocialFeed\Feed\FeedFactoryInterface;
 use Pixelant\PxaSocialFeed\Feed\InstagramFactory;
+use Pixelant\PxaSocialFeed\Feed\LinkedInFactory;
 use Pixelant\PxaSocialFeed\Feed\TwitterFactory;
 use Pixelant\PxaSocialFeed\Feed\YoutubeFactory;
 use Pixelant\PxaSocialFeed\Service\Expire\FacebookAccessTokenExpireService;
@@ -87,6 +88,9 @@ class ImportFeedsTaskService
                 case $configuration->getToken()->isYoutubeType():
                     $factory = GeneralUtility::makeInstance(YoutubeFactory::class);
                     break;
+                case $configuration->getToken()->isLinkedInType():
+                    $factory = GeneralUtility::makeInstance(LinkedInFactory::class);
+                    break;
                 default:
                     throw new UnsupportedTokenType(
                         "Token type '{$configuration->getToken()->getType()}' is not supported",
@@ -129,6 +133,9 @@ class ImportFeedsTaskService
         $updater->update($source);
         // Save changes
         $updater->persist();
+
+        // after persistance -> load images into cache and add sys_file_references
+        //$updater->loadImages();
 
         // Remove items from feed that are not valid anymore
         $updater->cleanUp($configuration);

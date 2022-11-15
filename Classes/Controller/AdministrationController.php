@@ -186,7 +186,7 @@ class AdministrationController extends ActionController
     /**
      * Edit token form
      *
-     * @param Token $token
+     * @param Token|null $token
      * @param int $type
      */
     public function editTokenAction(Token $token = null, int $type = Token::FACEBOOK): void
