@@ -59,7 +59,7 @@ class FeedsController extends ActionController
      */
     public function listAction(): void
     {
-        $limit = $this->settings['feedsLimit'] ? intval($this->settings['feedsLimit']) : 10;
+        $limit = $this->settings['feedsLimit'] ? (int)$this->settings['feedsLimit'] : 10;
         $configurations = GeneralUtility::intExplode(',', $this->settings['configuration'], true);
 
         $feeds = $this->feedRepository->findByConfigurations($configurations, $limit);
@@ -72,26 +72,15 @@ class FeedsController extends ActionController
                     $feed->getUid()
                 );
             } catch (\TYPO3Fluid\Fluid\Core\ViewHelper\Exception $exception) {
-                // maybe left over
+                // maybe left over?
                 $feed->setSmallImage("");
             }
 
             if (!empty($fileObjects)) {
                  // consider first image only
-                //$this->view->assign('images', $fileObjects[0]->getUid());
                 $feed->setSmallImage(
                     'fileadmin' .
                     $fileObjects[0]->getOriginalFile()->getIdentifier());
-
-                //foreach ($fileObjects as $key => $value) {
-                //    $feed->setSmallImage(
-                //        'fileadmin' .
-                //        $value->getOriginalFile()->getIdentifier());
-                //}
-
-            } else {
-                //default image path.
-                $feed->setSmallImage("");
             }
         }
 

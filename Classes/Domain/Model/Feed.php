@@ -230,7 +230,7 @@ class Feed extends AbstractEntity
     /**
      * @return int
      */
-    public function getImage()
+    public function getImage(): ?int
     {
         return $this->image;
     }
