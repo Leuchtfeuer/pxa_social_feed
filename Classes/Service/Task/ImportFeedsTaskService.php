@@ -135,7 +135,7 @@ class ImportFeedsTaskService
         $updater->persist();
 
         // after persistance -> load images into cache and add sys_file_references
-        $updater->loadImages();
+        //$updater->loadImages();
 
         // Remove items from feed that are not valid anymore
         $updater->cleanUp($configuration);

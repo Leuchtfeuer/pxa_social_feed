@@ -44,7 +44,7 @@ return (function () {
         ],
         'palettes' => [
             'core' => ['showitem' => 'hidden'],
-            'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, image, --linebreak--, image_url, --linebreak--, small_image, --linebreak--, likes, --linebreak--, configuration']
+            'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, image, --linebreak--, likes, --linebreak--, configuration']
         ],
         // @codingStandardsIgnoreEnd
         'columns' => [

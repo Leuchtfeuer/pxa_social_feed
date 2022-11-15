@@ -46,8 +46,6 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      */
     protected $feeds = null;
 
-    protected $ranAlready = false;
-
     /**
      * BaseUpdater constructor.
      */
@@ -194,12 +192,6 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     public function persist(): void
     {
         $this->objectManager->get(PersistenceManagerInterface::class)->persistAll();
-        /*
-        if (!$this->ranAlready) {
-            $this->createImageRelation();
-            $this->ranAlready = true;
-        }
-        */
     }
 
     /**

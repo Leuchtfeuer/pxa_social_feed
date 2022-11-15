@@ -583,7 +583,7 @@
 /* appearance of feed items - card */
 
 .social-feed-feeditemcard .social-feed-message {
-    height: 100px;
+    max-height: 100px;
 }
 
 .social-feed-feeditemcard .social-feed-message a,

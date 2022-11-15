@@ -73,7 +73,7 @@ class FeedsController extends ActionController
                 );
             } catch (\TYPO3Fluid\Fluid\Core\ViewHelper\Exception $exception) {
                 // maybe left over
-                $feed->setSmallImage("DEFAULT");
+                $feed->setSmallImage("");
             }
 
             if (!empty($fileObjects)) {
@@ -91,7 +91,7 @@ class FeedsController extends ActionController
 
             } else {
                 //default image path.
-                $feed->setSmallImage("DEFAULT");
+                $feed->setSmallImage("");
             }
         }
 
