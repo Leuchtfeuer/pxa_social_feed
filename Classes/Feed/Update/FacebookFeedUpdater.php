@@ -81,9 +81,7 @@ class FacebookFeedUpdater extends BaseUpdater
         } elseif (isset($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src'])) {
             $feed->setImageUrl($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src']);
         }
-        if($feed->getImageUrl() !== "" ){
-            $this->storeImg($feed->getImageUrl(), $this, $feed);
-        }
+
         if (isset($rawData['attachments']['data'][0]['title'])) {
             $feed->setTitle($rawData['attachments']['data'][0]['title']);
         }
@@ -102,7 +100,7 @@ class FacebookFeedUpdater extends BaseUpdater
 
         list($userId, $postId) = GeneralUtility::trimExplode('_', $rawData['id'], true);
         $feedItem->setPostUrl('https://facebook.com/' . $userId . '/posts/' . $postId);
-        $feedItem->setPostDate(\DateTime::createFromFormat(\DateTime::ISO8601, $rawData['created_time']));
+        $feedItem->setPostDate(\DateTime::createFromFormat(\DateTime::ATOM, $rawData['created_time']));
         $feedItem->setConfiguration($configuration);
         $feedItem->setExternalIdentifier($rawData['id']);
         $feedItem->setPid($configuration->getStorage());
