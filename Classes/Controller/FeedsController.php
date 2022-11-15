@@ -2,8 +2,10 @@
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
+use In2code\Powermail\Exception\ElementNotFoundException;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -55,23 +57,28 @@ class FeedsController extends ActionController
      *
      * @return void
      */
-    public function listAction()
+    public function listAction(): void
     {
         $limit = $this->settings['feedsLimit'] ? intval($this->settings['feedsLimit']) : 10;
         $configurations = GeneralUtility::intExplode(',', $this->settings['configuration'], true);
 
         $feeds = $this->feedRepository->findByConfigurations($configurations, $limit);
         foreach ($feeds as $feed) {
-            $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
-            $fileObjects = $fileRepository->findByRelation(
-                'tx_pxasocialfeed_domain_model_feed',
-                'image',
-                $feed->getUid()
-            );
+            try {
+                $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+                $fileObjects = $fileRepository->findByRelation(
+                    'tx_pxasocialfeed_domain_model_feed',
+                    'image',
+                    $feed->getUid()
+                );
+            } catch (\TYPO3Fluid\Fluid\Core\ViewHelper\Exception $exception) {
+                // maybe left over
+                $feed->setSmallImage("DEFAULT");
+            }
 
             if (!empty($fileObjects)) {
-                // consider first image only
-                $this->view->assign('images', $fileObjects[0]);
+                 // consider first image only
+                //$this->view->assign('images', $fileObjects[0]->getUid());
                 $feed->setSmallImage(
                     'fileadmin' .
                     $fileObjects[0]->getOriginalFile()->getIdentifier());

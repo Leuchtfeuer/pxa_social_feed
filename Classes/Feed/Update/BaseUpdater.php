@@ -161,8 +161,10 @@ abstract class BaseUpdater implements FeedUpdaterInterface
             if ($response->getStatusCode() === 200) {
 
                 $file_normal = $downloadFolderNormal->createFile($normal_f_name);
+                //DebuggerUtility::var_dump($response);
+                //die;
                 $file_normal->setContents($response->getBody()->getContents());
-                $feeditem->setSmallImage((string)$file_normal->getUid());
+                //$feeditem->setSmallImage((string)$file_normal->getUid());
 
             } else if ($response->getStatusCode() === 404) {
                 // not found

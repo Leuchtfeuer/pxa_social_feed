@@ -116,11 +116,6 @@ return (function () {
                         'maxitems' => 1,
                         'minitems'=> 0,
 
-                        'foreign_match_fields' => [
-                            'fieldname' => 'image',
-                            'tablenames' => 'tx_pxasocialfeed_domain_model_feeds',
-                            'table_local' => 'sys_file'
-                        ]
                     ],
 
                     $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']

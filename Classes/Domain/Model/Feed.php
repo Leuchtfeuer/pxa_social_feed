@@ -28,7 +28,6 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
@@ -93,7 +92,7 @@ class Feed extends AbstractEntity
     /**
      * image
      *
-     * @var \TYPO3\CMS\Core\Resource\FileReference $image
+     * @var int
      */
     protected $image = null;
 
@@ -221,15 +220,15 @@ class Feed extends AbstractEntity
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $image
+     * @param int $image
      */
-    public function setImage(FileReference $image): void
+    public function setImage(int $image): void
     {
         $this->image = $image;
     }
 
     /**
-     * @return FileReference
+     * @return int
      */
     public function getImage()
     {

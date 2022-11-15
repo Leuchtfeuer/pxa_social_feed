@@ -11,7 +11,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_feed
     post_url            varchar(255)        DEFAULT ''  NOT NULL,
     message             text                DEFAULT ''  NOT NULL,
     image_url           text                DEFAULT '',
-    image               blob                DEFAULT NULL,
+    image               int(11)             DEFAULT NULL,
     small_image         text                DEFAULT ''  NOT NULL,
     title               varchar(255)        DEFAULT ''  NOT NULL,
     likes               int(11) unsigned    DEFAULT '0',
