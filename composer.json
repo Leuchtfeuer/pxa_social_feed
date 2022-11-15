@@ -1,5 +1,5 @@
 {
-  "name": "Leuchtfeuer/pxa-social-feed",
+  "name": "leuchtfeuer/pxa-social-feed",
   "description": "Add Facebook, Instagram, and Twitter feeds to your site.",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
