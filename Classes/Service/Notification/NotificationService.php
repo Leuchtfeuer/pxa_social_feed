@@ -43,8 +43,8 @@ class NotificationService
         $mailer = $this->getMailer();
 
         $mailer
-            ->setSubject($subject)
-            ->setBody($message, 'text/html')
+            ->subject($subject)
+            ->html($message)
             ->send();
     }
 
