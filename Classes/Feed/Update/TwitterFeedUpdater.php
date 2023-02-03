@@ -24,22 +24,45 @@ class TwitterFeedUpdater extends BaseUpdater
     {
         $items = $source->load();
 
-        foreach ($items as $rawData) {
-            $feedItem = $this->feedRepository->findOneByExternalIdentifier(
-                $rawData['id_str'],
-                $source->getConfiguration()->getStorage()
-            );
+        if (!empty($items['data'])) {
+            foreach ($items['data'] as $rawData) {
+                $feedItem = $this->feedRepository->findOneByExternalIdentifier(
+                    $rawData['id'],
+                    $source->getConfiguration()->getStorage()
+                );
 
-            if ($feedItem === null) {
-                $feedItem = $this->createFeedItem($rawData, $source->getConfiguration());
+                // get image url from data
+                $rawData['imgUrl'] = '';
+                if (isset($rawData['attachments']) && isset($rawData['attachments']['media_keys']) && !empty($rawData['attachments']['media_keys'][0])) {
+                    foreach ($items['includes']['media'] as $media) {
+                        if ($media['media_key'] === $rawData['attachments']['media_keys'][0]) {
+                            $rawData['imgUrl'] = $media['url'];
+                            break;
+                        }
+                    }
+                }
+
+                // get username from data
+                $rawData['username'] = '';
+                if (!empty($rawData['author_id'])) {
+                    foreach ($items['includes']['users'] as $users) {
+                        if ($users['id'] === $rawData['author_id']) {
+                            $rawData['username'] = $users['username'];
+                        }
+                    }
+                }
+
+                if ($feedItem === null) {
+                    $feedItem = $this->createFeedItem($rawData, $source->getConfiguration());
+                }
+
+                $this->updateFeedItem($feedItem, $rawData);
+
+                // Call hook
+                $this->emitSignal('beforeUpdateTwitterFeed', [$feedItem, $rawData, $source->getConfiguration()]);
+
+                $this->addOrUpdateFeedItem($feedItem);
             }
-
-            $this->updateFeedItem($feedItem, $rawData);
-
-            // Call hook
-            $this->emitSignal('beforeUpdateTwitterFeed', [$feedItem, $rawData, $source->getConfiguration()]);
-
-            $this->addOrUpdateFeedItem($feedItem);
         }
     }
 
@@ -57,10 +80,10 @@ class TwitterFeedUpdater extends BaseUpdater
 
         $feedItem->setPostDate($date);
         $feedItem->setPostUrl(
-            'https://twitter.com/' . $configuration->getSocialId() . '/status/' . $rawData['id_str']
+            'https://twitter.com/' . $rawData['username'] . '/status/' . $rawData['id']
         );
         $feedItem->setConfiguration($configuration);
-        $feedItem->setExternalIdentifier($rawData['id_str']);
+        $feedItem->setExternalIdentifier($rawData['id']);
         $feedItem->setPid($configuration->getStorage());
         $feedItem->setType(Token::TWITTER);
 
@@ -83,13 +106,12 @@ class TwitterFeedUpdater extends BaseUpdater
         }
 
         // Media
-        $image = $rawData['entities']['media'][0]['media_url_https'] ?? '';
-        if ($feedItem->getImage() != $image) {
-            $feedItem->setImage($image);
+        $image = $rawData['imgUrl'] ?? '';
+        if ($feedItem->getImageUrl() != $image) {
+            $feedItem->setImageUrl($image);
         }
 
-        $likes = intval($rawData['retweeted_status']['favorite_count'] ?? $rawData['favorite_count'] ?? 0);
-
+        $likes = intval($rawData['public_metrics']['like_count'] ?? 0);
         if ($likes != $feedItem->getLikes()) {
             $feedItem->setLikes($likes);
         }

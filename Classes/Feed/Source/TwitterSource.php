@@ -16,7 +16,7 @@ class TwitterSource extends BaseSource
     /**
      * Twitter api
      */
-    const API_URL = 'https://api.twitter.com/1.1/';
+    const API_URL = 'https://api.twitter.com/2/';
 
     /**
      * Load feed source
@@ -25,7 +25,9 @@ class TwitterSource extends BaseSource
      */
     public function load(): array
     {
-        $endPointUrl = $this->generateEndPointUrl('statuses/user_timeline.json');
+        $configuration = $this->getConfiguration();
+
+        $endPointUrl = $this->generateEndPointUrl('users/' . $configuration->getSocialId() . '/tweets');
         $fields = $this->getFields();
 
         $authHeader = $this->getAuthHeader($endPointUrl, $fields);
@@ -99,11 +101,12 @@ class TwitterSource extends BaseSource
 
         // Important to pass field value as string, because it's encoded with rawurlencode
         $fields = [
-            'screen_name' => $configuration->getSocialId(),
-            'count' => (string)$configuration->getMaxItems(),
-            'tweet_mode' => 'extended',
-            'exclude_replies' => '1',
-            'include_rts' => '1'
+            'max_results' => (string)$configuration->getMaxItems(),
+            'exclude' => 'replies',
+            'tweet.fields' => 'id,created_at,text,author_id,public_metrics,attachments',
+            'media.fields' => 'media_key,url',
+            'user.fields' => 'username',
+            'expansions' => 'attachments.media_keys,author_id',
         ];
 
         list($fields) = $this->emitSignal('beforeReturnTwitterQueryFields', [$fields]);
