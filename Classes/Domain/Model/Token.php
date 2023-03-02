@@ -123,7 +123,7 @@ class Token extends AbstractEntity
     protected $accessTokenSecret = '';
 
     /**
-     * @var Facebook
+     * @var ?Facebook
      */
     protected $fb = null;
 
@@ -360,7 +360,7 @@ class Token extends AbstractEntity
 
         $fb = $this->getFb($clientId, $clientSecret, $redirectUrl);
         return $fb->getAuthorizationUrl([
-            'scope' => ['email'],
+            'scope' => $permissions,
         ]) . '&bypass=1';
     }
 
