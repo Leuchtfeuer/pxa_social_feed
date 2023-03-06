@@ -29,6 +29,7 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  ***************************************************************/
 
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
@@ -339,7 +340,8 @@ class Token extends AbstractEntity
                 'access_token' => $this->getAccessToken()
             ]);
             $this->getFb($this->getAppId(), $this->getAppSecret())->getLongLivedAccessToken($token);
-        } catch (FacebookProviderException $exception) {
+            // HINT: This FacebookProviderException is flawed, so IdentityProviderException has to be checked too (v2.2.0) of oauth2-facebook
+        } catch (FacebookProviderException | IdentityProviderException $exception) {
             return null;
         }
 
