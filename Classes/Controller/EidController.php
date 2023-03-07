@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
-use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Provider\Facebook;
+use League\OAuth2\Client\Token\AccessToken;
+use Pixelant\PxaSocialFeed\Domain\Provider\FacebookBusiness;
 use Pixelant\PxaSocialFeed\Exception\FacebookObtainAccessTokenException;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Psr\Http\Message\ResponseInterface;
@@ -56,7 +56,7 @@ class EidController
 
         if ($appId && $appSecret) {
             try {
-                $fb = new Facebook(
+                $fb = new FacebookBusiness(
                     [
                         'clientId' => $appId,
                         'clientSecret' => $appSecret,
@@ -87,13 +87,13 @@ class EidController
     /**
      * Convert access token to long term token
      *
-     * @param Facebook $fb
+     * @param FacebookBusiness $fb
      * @param AccessToken $accessToken
      * @param int $tokenUid
      * @param ResponseInterface $response
      */
     protected function getAndPersistLongLivedAccessToken(
-        Facebook $fb,
+        FacebookBusiness $fb,
         AccessToken $accessToken,
         int $tokenUid,
         ResponseInterface $response
@@ -164,11 +164,11 @@ class EidController
     /**
      * Get user access token
      *
-     * @param Facebook $fb
+     * @param FacebookBusiness $fb
      * @return AccessToken
      * @throws FacebookObtainAccessTokenException
      */
-    protected function obtainAccessToken(Facebook $fb): AccessToken
+    protected function obtainAccessToken(FacebookBusiness $fb): AccessToken
     {
         // If we don't have an authorization code then get one
         if (!isset($_GET['code'])) {

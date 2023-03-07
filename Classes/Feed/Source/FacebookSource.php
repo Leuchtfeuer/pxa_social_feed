@@ -17,9 +17,10 @@ class FacebookSource extends BaseFacebookSource
     public function load(): array
     {
         $endPointUrl = $this->generateEndPoint($this->getConfiguration()->getSocialId(), 'feed');
+        $str = $this->getConfiguration()->getToken()->getFb()::BASE_GRAPH_URL .
+            self::GRAPH_VERSION . '/' . $endPointUrl;
         $response = file_get_contents(
-            $this->getConfiguration()->getToken()->getFb()::BASE_GRAPH_URL .
-            self::GRAPH_VERSION . '/' . $endPointUrl
+            $str
         );
         $response = json_decode($response, true);
 
@@ -39,6 +40,7 @@ class FacebookSource extends BaseFacebookSource
             'attachments',
             'created_time',
             'updated_time',
+            'access_token',
         ];
     }
 }
