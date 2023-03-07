@@ -281,6 +281,20 @@ class Token extends AbstractEntity
         $this->beGroup = $beGroup;
     }
 
+   public function getPageAccessToken() {
+       try {
+           $token = new AccessToken([
+               'access_token' => $this->getAccessToken(),
+           ]);
+           $this->getFb(
+               $this->getAppId(),
+               $this->getAppSecret()
+           )->getLongLivedAccessToken($token);
+       } catch (FacebookProviderException $exception) {
+           $isValid = false;
+       }
+   }
+
     /**
      * Check if facebook token is valid
      *

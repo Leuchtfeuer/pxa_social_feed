@@ -2,11 +2,14 @@
 
 namespace Pixelant\PxaSocialFeed\Domain\Provider;
 
+use FacebookAds\Api;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\AppSecretProof;
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
+use Pixelant\PxaSocialFeed\Domain\Model\Token;
+use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -137,7 +140,7 @@ class FacebookBusiness extends AbstractProvider
      *
      * @param string $accessToken
      *
-     * @return \League\OAuth2\Client\Token\AccessToken
+     * @return AccessToken
      *
      * @throws FacebookProviderException
      */
@@ -148,6 +151,35 @@ class FacebookBusiness extends AbstractProvider
         ];
 
         return $this->getAccessToken('fb_exchange_token', $params);
+    }
+
+    /**
+     * @throws IdentityProviderException
+     * @throws \Exception
+     */
+    public function getPageAccessToken(Token $accessToken, string $socialId): string
+    {
+        $fields = [
+            'name',
+            'access_token',
+        ];
+
+        $str = $this->getBaseGraphUrl() . $this->graphApiVersion . '/me/accounts?fields=' . implode(',', $fields)
+            . '&access_token=' . $accessToken->getAccessToken();
+        $response = file_get_contents(
+            $str
+        );
+//        '{"data":[{"name":"Big Dutchman Deutschland","access_token":"EAATeLDdBZAKsBADOZBmo7f4GD63ZAzalAwXwV0djTAqinyeLAvSvpV5lyGtDEVsGjHibAgb3wzrFCTQuLrzQhLMthGAnk6l3H2DTtOkZBaRwnk6TZCZCJvUGzPMUucL0xYMlkRWjjsyLQUEGpCWfT8uLyBXLtZCSocatXG4yDXX0rhfdtBc71u1M81d2QdPOZAUZD","id":"263697775505133"}],"paging":{"cursors":{"before":"QVFIUlEwQWJzQUpqTkpSeVFCQ2lVbTg5eU1PUkhFU1FzWnI2Y1dfRTJ5RGptd21zNWdmSkZAUTEZANVFdKdWVrN2wxLXhKa3VhYUU0N1ZAnajdxS1ZAFYVRfdUNn","after":"QVFIUlEwQWJzQUpqTkpSeVFCQ2lVbTg5eU1PUkhFU1FzWnI2Y1dfRTJ5RGptd21zNWdmSkZAUTEZANVFdKdWVrN2wxLXhKa3VhYUU0N1ZAnajdxS1ZAFYVRfdUNn"}}}'
+        $response = json_decode($response, true);
+        $data = $this->getDataFromResponse($response);
+
+        foreach ($data as $item) {
+            if ($item['id'] === $socialId) {
+                return $item['access_token'];
+            }
+        }
+
+        return "";
     }
 
     protected function createResourceOwner(array $response, AccessToken $token)
@@ -201,5 +233,22 @@ class FacebookBusiness extends AbstractProvider
     private function getBaseGraphUrl()
     {
         return $this->enableBetaMode ? static::BASE_GRAPH_URL_BETA : static::BASE_GRAPH_URL;
+    }
+    /**
+     * Get data from facebook
+     *
+     * @param array $response
+     * @return array
+     */
+    protected function getDataFromResponse(array $response): array
+    {
+        if (!is_array($response) || !isset($response['data'])) {
+            throw new \Exception (
+                'Invalid data received for configuration ' . $this->getConfiguration()->getName() . '.',
+                1562842385128
+            );
+        }
+
+        return $response['data'];
     }
 }
