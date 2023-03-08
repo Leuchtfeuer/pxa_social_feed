@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
 
 /**
- * Class FacebookSource
+ * Class FacebookBusinessSource
  * @package Pixelant\PxaSocialFeed\Feed\Source
  */
 class FacebookBusinessSource extends BaseFacebookSource
@@ -14,8 +15,13 @@ class FacebookBusinessSource extends BaseFacebookSource
     /**
      * Load feed source
      *
+     * This implementation uses the saved (personal) access_token to get an ephemeral page access_token for
+     * the configured social id (page id). This is necessary because the personal access_token is not allowed
+     * to access the page feed.
+     *
      * @return array Feed items
      * @throws InvalidFeedSourceData
+     * @throws IdentityProviderException
      */
     public function load(): array
     {
@@ -24,17 +30,11 @@ class FacebookBusinessSource extends BaseFacebookSource
         $fb = $config->getToken()->getFb();
         $pageAccessToken = $fb->getPageAccessToken($this->getConfiguration()->getToken(), $this->getConfiguration()->getSocialId());
 
-        $fields = implode(',', $this->getEndPointFields());
-
-        $str = $fb::BASE_GRAPH_URL .
-            self::GRAPH_VERSION . '/' .$this->generateBusinessEndPoint($this->getConfiguration()->getSocialId(), 'feed', $pageAccessToken);
-
         $response = file_get_contents(
-            $str
+            $fb::BASE_GRAPH_URL .
+            self::GRAPH_VERSION . '/' .$this->generateBusinessEndPoint($this->getConfiguration()->getSocialId(), 'feed', $pageAccessToken)
         );
-//        https://graph.facebook.com/v12.0/263697775505133/feed?limit=10&access_token=EAATeLDdBZAKsBAMkLYkz4VwGmjT38U3oRi5eL9dEnRQeqvf4E3b4PnFEfZB1gnOi4oysFYy76PelyFMENM9lOzxClvZC82RZCdED6OclWHIAPOyPkwolGk8VxIMjTbeJimY4MFm6ejFR6DEGKUB5e8HLDcstEcsfZCHfI6FFYLersqMhWBQHuv6LfJWSuzgUZD
-//        https://graph.facebook.com/v12.0/263697775505133/feeds?fields=reactions.summary%28true%29.limit%280%29%2Cmessage%2Cattachments%2Ccreated_time%2Cupdated_time%2Caccess_token&limit=10&access_token=EAATeLDdBZAKsBAHnfIUzFHFw2jlcPQwNOUt9b3hIDPT9OaWFCZB8IxZATpanZCcLBDHYDm0ZBe6Am0EgEJrri1zDL3WuKF2ZC0eBNqZC788oNavRMnr5NpYIEw3L5MgTOO24ZAF8zZC07mcQ53xIB0ObFMZA2lGhbvBzZCF8t1zhc2fzEdk7oPobpNz3M8r81mYn9YZD&appsecret_proof=d2748e6cbd0426d1df67563d7ba4ae86ab9049654efbebe042082aed72a5da55
-        $response = json_decode($response, true);
+        $response = json_decode($response, true,512, JSON_INVALID_UTF8_SUBSTITUTE  );
 
         return $this->getDataFromResponse($response);
     }

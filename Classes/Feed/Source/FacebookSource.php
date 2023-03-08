@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
+use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
+
 /**
  * Class FacebookSource
  * @package Pixelant\PxaSocialFeed\Feed\Source

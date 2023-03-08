@@ -30,7 +30,6 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
 
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Domain\Provider\FacebookBusiness;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
