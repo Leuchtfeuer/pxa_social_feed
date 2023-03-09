@@ -112,7 +112,7 @@ class FacebookBusiness extends AbstractProvider
         $fields = [
             'id', 'name', 'first_name', 'last_name',
             'email', 'hometown', 'picture.type(large){url,is_silhouette}',
-            'gender', 'age_range, accounts',
+            'gender', 'age_range, accounts, ids_for_apps',
         ];
 
         // backwards compatibility less than 2.8
@@ -169,7 +169,6 @@ class FacebookBusiness extends AbstractProvider
         $response = file_get_contents(
             $str
         );
-//        '{"data":[{"name":"Big Dutchman Deutschland","access_token":"EAATeLDdBZAKsBADOZBmo7f4GD63ZAzalAwXwV0djTAqinyeLAvSvpV5lyGtDEVsGjHibAgb3wzrFCTQuLrzQhLMthGAnk6l3H2DTtOkZBaRwnk6TZCZCJvUGzPMUucL0xYMlkRWjjsyLQUEGpCWfT8uLyBXLtZCSocatXG4yDXX0rhfdtBc71u1M81d2QdPOZAUZD","id":"263697775505133"}],"paging":{"cursors":{"before":"QVFIUlEwQWJzQUpqTkpSeVFCQ2lVbTg5eU1PUkhFU1FzWnI2Y1dfRTJ5RGptd21zNWdmSkZAUTEZANVFdKdWVrN2wxLXhKa3VhYUU0N1ZAnajdxS1ZAFYVRfdUNn","after":"QVFIUlEwQWJzQUpqTkpSeVFCQ2lVbTg5eU1PUkhFU1FzWnI2Y1dfRTJ5RGptd21zNWdmSkZAUTEZANVFdKdWVrN2wxLXhKa3VhYUU0N1ZAnajdxS1ZAFYVRfdUNn"}}}'
         $response = json_decode($response, true);
         $data = $this->getDataFromResponse($response);
 
