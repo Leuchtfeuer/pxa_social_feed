@@ -19,9 +19,6 @@ class FacebookSource extends BaseFacebookSource
      */
     public function load(): array
     {
-        // get PageAccessToken
-
-
         $endPointUrl = $this->generateEndPoint($this->getConfiguration()->getSocialId(), 'feed');
         $str = $this->getConfiguration()->getToken()->getFb()::BASE_GRAPH_URL .
             self::GRAPH_VERSION . '/' . $endPointUrl;

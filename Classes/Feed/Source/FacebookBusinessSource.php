@@ -57,7 +57,7 @@ class FacebookBusinessSource extends BaseFacebookSource
     }
 
     /**
-     * Generate facebook endpoint
+     * Generate facebookbusiness endpoint
      *
      * @param string $id
      * @param string $endPointEntry
@@ -70,7 +70,7 @@ class FacebookBusinessSource extends BaseFacebookSource
 
         $fields = $this->getEndPointFields();
 
-        [$fields] = $this->emitSignal('facebookEndPointRequestFields', [$fields]);
+        [$fields] = $this->emitSignal('facebookBusinessEndPointRequestFields', [$fields]);
 
         $url = $id . '/' . $endPointEntry;
 
@@ -87,7 +87,7 @@ class FacebookBusinessSource extends BaseFacebookSource
 
         $endPoint = $this->addFieldsAsGetParametersToUrl($url, $queryParams);
 
-        [$endPoint] = $this->emitSignal('faceBookEndPoint', [$endPoint]);
+        [$endPoint] = $this->emitSignal('faceBookBusinessEndPoint', [$endPoint]);
 
         return $endPoint;
     }

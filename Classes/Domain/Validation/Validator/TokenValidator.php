@@ -57,6 +57,7 @@ class TokenValidator extends AbstractValidator
         switch (true) {
             case $token->isFacebookType():
             case $token->isInstagramType():
+            case $token->isFacebookBusinessType():
                 $properties = ['appId', 'appSecret'];
                 break;
             case $token->isTwitterType():

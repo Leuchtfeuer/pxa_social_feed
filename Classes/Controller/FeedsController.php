@@ -106,7 +106,11 @@ class FeedsController extends ActionController
             ], [
                 "id" => Token::LINKEDIN,
                 "type" => "linkedin"
-            ]
+            ],
+            [
+                "id" => Token::FACEBOOK_BUSINESS,
+                "type" => "facebookbusiness"
+            ],
         ];
         $this->view->assign('filters', $filters);
     }

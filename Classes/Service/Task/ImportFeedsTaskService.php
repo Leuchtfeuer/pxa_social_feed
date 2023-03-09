@@ -8,6 +8,7 @@ use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Domain\Repository\ConfigurationRepository;
 use Pixelant\PxaSocialFeed\Exception\FailedExecutingImportException;
 use Pixelant\PxaSocialFeed\Exception\UnsupportedTokenType;
+use Pixelant\PxaSocialFeed\Feed\FacebookBusinessFeedFactory;
 use Pixelant\PxaSocialFeed\Feed\FacebookFeedFactory;
 use Pixelant\PxaSocialFeed\Feed\FeedFactoryInterface;
 use Pixelant\PxaSocialFeed\Feed\InstagramFactory;
@@ -76,6 +77,11 @@ class ImportFeedsTaskService
                     // Check if access is valid
                     $this->checkFacebookAccessToken($configuration->getToken());
                     $factory = GeneralUtility::makeInstance(FacebookFeedFactory::class);
+                    break;
+                case $configuration->getToken()->isFacebookBusinessType():
+                    // Check if access is valid
+                    $this->checkFacebookAccessToken($configuration->getToken());
+                    $factory = GeneralUtility::makeInstance(FacebookBusinessFeedFactory::class);
                     break;
                 case $configuration->getToken()->isInstagramType():
                     // Check if access is valid

@@ -30,8 +30,10 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
 
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Domain\Provider\FacebookBusiness;
+use Pixelant\PxaSocialFeed\Feed\Source\FacebookBusinessSource;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -66,9 +68,14 @@ class Token extends AbstractEntity
     const YOUTUBE = 4;
 
     /**
-     * youtube token
+     * linkedin token
      */
     const LINKEDIN = 5;
+
+    /**
+     * facebook business token
+     */
+    const FACEBOOK_BUSINESS = 6;
 
     /**
      * Default PID
@@ -124,9 +131,13 @@ class Token extends AbstractEntity
     protected $accessTokenSecret = '';
 
     /**
-     * @var FacebookBusiness
+     * @var Facebook
      */
     protected $fb = null;
+    /**
+     * @var FacebookBusiness
+     */
+    protected $fbBusiness = null;
 
     /**
      * Initialize
@@ -488,7 +499,15 @@ class Token extends AbstractEntity
     {
         return $this->type === static::LINKEDIN;
     }
-
+    /**
+     * Check if it's of type facebookbusiness
+     *
+     * @return bool
+     */
+    public function isFacebookBusinessType()
+    {
+        return $this->type === static::FACEBOOK_BUSINESS;
+    }
     /**
      * Get FB
      *
@@ -511,6 +530,29 @@ class Token extends AbstractEntity
     }
 
     /**
+     * Get FBB
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $redirectUri
+     * @return FacebookBusiness
+     */
+    public function getFbB(string $clientId = '', string $clientSecret = '', string $redirectUri = ''): FacebookBusiness
+    {
+        if ($this->fb === null) {
+            $this->fb = new FacebookBusiness(
+                [
+                    'clientId'          => $clientId,
+                    'clientSecret'      => $clientSecret,
+                    'redirectUri'       => $redirectUri,
+                    'graphApiVersion'   => FacebookBusinessSource::GRAPH_VERSION,
+                ]
+            );
+        }
+
+        return $this->fb;
+    }
+    /**
      * Return all available types
      *
      * @return array
@@ -522,7 +564,8 @@ class Token extends AbstractEntity
             static::INSTAGRAM,
             static::TWITTER,
             static::YOUTUBE,
-            static::LINKEDIN
+            static::LINKEDIN,
+            static::FACEBOOK_BUSINESS,
         ];
     }
 }

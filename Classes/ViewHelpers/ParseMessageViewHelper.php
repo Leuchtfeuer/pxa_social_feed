@@ -130,6 +130,14 @@ class ParseMessageViewHelper extends AbstractViewHelper
             case Token::LINKEDIN:
                 // Nothing to convert - manual entry
                 break;
+            case Token::FACEBOOK_BUSINESS:
+                //Convert hashtags to facebook searches in <a> links
+                $text = preg_replace(
+                    "/#([A-Za-z0-9\/\.]*)/",
+                    "<a target=\"_blank\" href=\"https://www.facebook.com/hashtag/$1?source=feed_text\">#$1</a>",
+                    $text
+                );
+                break;
             default:
                 throw new UnsupportedTokenType("Token type $type is not supported by view helper", 1564384491599);
         }
