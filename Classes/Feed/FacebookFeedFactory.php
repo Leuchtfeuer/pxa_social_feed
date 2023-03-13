@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pixelant\PxaSocialFeed\Feed;
 
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
+use Pixelant\PxaSocialFeed\Feed\Source\FacebookBusinessSource;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Pixelant\PxaSocialFeed\Feed\Source\FeedSourceInterface;
 use Pixelant\PxaSocialFeed\Feed\Update\FacebookFeedUpdater;
@@ -25,7 +26,7 @@ class FacebookFeedFactory implements FeedFactoryInterface
      */
     public function getFeedSource(Configuration $configuration): FeedSourceInterface
     {
-        return GeneralUtility::makeInstance(FacebookSource::class, $configuration);
+        return GeneralUtility::makeInstance(FacebookBusinessSource::class, $configuration);
     }
 
     /**

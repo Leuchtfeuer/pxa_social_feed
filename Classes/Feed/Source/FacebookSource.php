@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
+use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
+
 /**
  * Class FacebookSource
  * @package Pixelant\PxaSocialFeed\Feed\Source
@@ -13,6 +15,7 @@ class FacebookSource extends BaseFacebookSource
      * Load feed source
      *
      * @return array Feed items
+     * @throws InvalidFeedSourceData
      */
     public function load(): array
     {
@@ -46,6 +49,7 @@ class FacebookSource extends BaseFacebookSource
             'attachments',
             'created_time',
             'updated_time',
+            'access_token',
         ];
     }
 }

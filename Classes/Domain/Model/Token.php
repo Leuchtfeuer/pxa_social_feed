@@ -29,8 +29,9 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  ***************************************************************/
 
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
-use League\OAuth2\Client\Provider\Facebook;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
+use Pixelant\PxaSocialFeed\Domain\Provider\FacebookBusiness;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -123,7 +124,7 @@ class Token extends AbstractEntity
     protected $accessTokenSecret = '';
 
     /**
-     * @var Facebook
+     * @var FacebookBusiness
      */
     protected $fb = null;
 
@@ -279,6 +280,20 @@ class Token extends AbstractEntity
         $this->beGroup = $beGroup;
     }
 
+   public function getPageAccessToken() {
+       try {
+           $token = new AccessToken([
+               'access_token' => $this->getAccessToken(),
+           ]);
+           $this->getFb(
+               $this->getAppId(),
+               $this->getAppSecret()
+           )->getLongLivedAccessToken($token);
+       } catch (FacebookProviderException $exception) {
+           $isValid = false;
+       }
+   }
+
     /**
      * Check if facebook token is valid
      *
@@ -339,7 +354,8 @@ class Token extends AbstractEntity
                 'access_token' => $this->getAccessToken()
             ]);
             $this->getFb($this->getAppId(), $this->getAppSecret())->getLongLivedAccessToken($token);
-        } catch (FacebookProviderException $exception) {
+            // HINT: This FacebookProviderException is flawed, so IdentityProviderException has to be checked too (v2.2.0) of oauth2-facebook
+        } catch (FacebookProviderException | IdentityProviderException $exception) {
             return null;
         }
 
@@ -390,6 +406,17 @@ class Token extends AbstractEntity
                 $body->getName(),
                 $body->getId()
             );
+            foreach ($body->getAccounts() as $account) {
+                //if (is_array($account)) {
+                //    $accounts[$account["id"]] = $account;
+                //} else {
+                $accounts[$account['id']] = sprintf(
+                    '%s (ID: %s)',
+                    $account['name'],
+                    $account['id']
+                );
+                // }
+            }
         } else {
             $accounts = ['0' => 'Invalid data. Could not fetch accounts(pages) list from facebook'];
         }
@@ -465,12 +492,12 @@ class Token extends AbstractEntity
     /**
      * Get FB
      *
-     * @return Facebook
+     * @return FacebookBusiness
      */
-    public function getFb(string $clientId = '', string $clientSecret = '', string $redirectUri = ''): Facebook
+    public function getFb(string $clientId = '', string $clientSecret = '', string $redirectUri = ''): FacebookBusiness
     {
         if ($this->fb === null) {
-            $this->fb = new Facebook(
+            $this->fb = new FacebookBusiness(
                 [
                     'clientId'          => $clientId,
                     'clientSecret'      => $clientSecret,
