@@ -17,11 +17,18 @@ class FacebookSource extends BaseFacebookSource
     public function load(): array
     {
         $endPointUrl = $this->generateEndPoint($this->getConfiguration()->getSocialId(), 'feed');
-        $response = file_get_contents(
-            $this->getConfiguration()->getToken()->getFb()::BASE_GRAPH_URL .
+
+        $url =             $this->getConfiguration()->getToken()->getFb()::BASE_GRAPH_URL .
             self::GRAPH_VERSION . '/' . $endPointUrl
-        );
-        $response = json_decode($response, true);
+;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response = json_decode($response ?: "", true);
 
         return $this->getDataFromResponse($response);
     }

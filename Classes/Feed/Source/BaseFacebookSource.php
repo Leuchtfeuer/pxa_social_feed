@@ -58,7 +58,7 @@ abstract class BaseFacebookSource extends BaseSource
     {
         if (!is_array($response) || !isset($response['data'])) {
             throw new InvalidFeedSourceData(
-                'Invalid data received for configuration ' . $this->getConfiguration()->getName() . '.',
+                'Invalid data received for configuration ' . $this->getConfiguration()->getName() . ': ' . $response['error']['message'] . '.',
                 1562842385128
             );
         }
